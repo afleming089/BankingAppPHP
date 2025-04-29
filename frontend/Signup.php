@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Signup</title>
 </head>
 
 <body>
@@ -15,6 +15,7 @@
         <input id="password" type="password" name="password" required>
         <input type="submit" value="signup">
     </form>
+    <a href="Login.php">Already have an account? Login here</a>
 </body>
 
 <script>
@@ -30,7 +31,8 @@
         fetch('http://localhost:81/BankingApp/backend/controller/UserController.php', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-Endpoint': 'signup'
             },
             body: JSON.stringify({
                 username: username,

@@ -1,17 +1,22 @@
 <?php
 require_once('../service/UserService.php');
 
-$uri = parse_url($_SERVER['REQUEST_URI']);
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
+
+$input = json_decode(file_get_contents('php://input'), true);
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 $userService = new UserService();
 
 switch ($method) {
     case 'POST':
-        $userService->createUser($uri['username'], $uri['password']);
-        echo json_encode([
-            'id' => 'success',
-            'username' => 'User created successfully'
-        ]);
+        $username = $input['username'] ?? '';
+        $password = $input['password'] ?? '';
+
+        $results = $userService->createUser($username, $password);
+        echo json_encode($results);
+        break;
 }
 ?>

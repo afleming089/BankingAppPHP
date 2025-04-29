@@ -13,16 +13,10 @@ class UserService
         }
 
         // Hash the password
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $hashedPassword = hash('sha256', $password);
 
         $userRepository = new UserRepository();
-        $result = $userRepository->createUser($username, $hashedPassword);
-        if ($result) {
-
-        } else {
-
-        }
-
+        return $userRepository->createUser($username, $hashedPassword);
     }
 }
 ?>

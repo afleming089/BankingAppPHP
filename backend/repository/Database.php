@@ -13,7 +13,7 @@ class Database
             return new mysqli($servername, $username, $password, $dbname, $port);
         } catch (\Throwable $th) {
             //throw $th;
-            throw new Exception("Error Processing Request", $th->getCode(), $th);
+            throw new Exception("Failed to connect to DB", $th->getCode(), $th);
         }
     }
 }

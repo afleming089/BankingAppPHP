@@ -19,12 +19,13 @@
 
 <script>
     document.getElementById('signup').addEventListener('submit', onSubmit);
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+
 
     function onSubmit(e) {
         e.preventDefault();
 
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
         fetch('http://localhost:81/BankingApp/backend/controller/UserController.php', {
             method: 'POST',
@@ -35,16 +36,14 @@
                 username: username,
                 password: password
             })
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response);
+        }).then(data => {
+            console.log('Success:', data);
         })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Network response was not ok.');
-            })
-            .then(data => {
-                console.log('Success:', data);
-            })
     }
 </script>
 

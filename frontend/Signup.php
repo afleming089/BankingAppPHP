@@ -7,14 +7,45 @@
 </head>
 
 <body>
-    <form method="POST" action="../backend/controller/UserController.php">
+    <form method="POST" id="signup">
+        <h1>Signup</h1>
         <label>Username</label>
-        <input type="text" name="username" required>
+        <input id="username" type="text" name="username" required>
         <label>Password</label>
-        <input type="password" name="password" required>
+        <input id="password" type="password" name="password" required>
         <input type="submit" value="signup">
     </form>
-
 </body>
+
+<script>
+    document.getElementById('signup').addEventListener('submit', onSubmit);
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    function onSubmit(e) {
+        e.preventDefault();
+
+
+        fetch('http://localhost:81/BankingApp/backend/controller/UserController.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                console.log('Success:', data);
+            })
+    }
+</script>
 
 </html>

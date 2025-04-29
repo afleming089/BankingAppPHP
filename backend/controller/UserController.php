@@ -4,8 +4,10 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'POST':
-        echo "POST request received";
-        break;
+        echo json_encode([
+            'id' => 'success',
+            'username' => 'User created successfully'
+        ]);
 }
 
 ?>

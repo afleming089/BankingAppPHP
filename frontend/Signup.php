@@ -42,8 +42,14 @@
             }
             throw new Error(response);
         }).then(data => {
-            console.log('Success:', data);
-        })
+            document.cookie = "id=data.id;";
+            document.cookie = "username=data.username;";
+            document.cookie = "auth=data.auth;";
+            window.location.href = 'Dashboard.php';
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('Error: ' + error.message);
+        });
     }
 </script>
 

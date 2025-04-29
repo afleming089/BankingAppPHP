@@ -13,16 +13,20 @@ class UserRepository
 
         $stmt = $conn->prepare("INSERT INTO Users (Username, PasswordHash) VALUES (?, ?)");
         $stmt->bind_param("ss", $username, $password); // 'ss' = 2 strings
-        if (!stmt) {
+        if (!$stmt) {
             die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
         }
 
         if ($stmt->execute() === TRUE) {
+            $userId = $stmt->insert_id;
             $conn->close();
             return [
-                'id' => 'success',
-                'username' => 'User created successfully'
+                'id' => $userId,
+                'username' => $username,
+                'auth' => true,
             ];
+
+
         }
         return [
             'type' => 'error',
@@ -30,8 +34,4 @@ class UserRepository
         ];
     }
 }
-
-$userRepository = new UserRepository();
-$hashedPassword = hash('sha256', "pass");
-$userRepository->createUser('testuser', $hashedPassword);
 ?>

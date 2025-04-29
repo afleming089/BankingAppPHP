@@ -1,4 +1,5 @@
 <?php
+require_once('../repository/UserRepository.php');
 class UserService
 {
     public function createUser(string $username, string $password)
@@ -14,6 +15,13 @@ class UserService
         // Hash the password
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
+        $userRepository = new UserRepository();
+        $result = $userRepository->createUser($username, $hashedPassword);
+        if ($result) {
+
+        } else {
+
+        }
 
     }
 }

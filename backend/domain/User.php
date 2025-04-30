@@ -1,6 +1,4 @@
 <?php
-require_once 'Account.php';
-
 class User implements JsonSerializable
 {
     private $id;
@@ -22,7 +20,7 @@ class User implements JsonSerializable
         ];
     }
 
-    public function getusername()
+    public function getUsername()
     {
         return $this->username;
     }

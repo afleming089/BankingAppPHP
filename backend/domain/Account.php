@@ -30,6 +30,10 @@ abstract class Account implements JsonSerializable
             throw new Exception("Deposit amount must be positive");
         }
     }
+    function getType()
+    {
+        return $this->type;
+    }
     public function getNickname()
     {
         return $this->nickname;

@@ -44,12 +44,15 @@ class UserRepository
             $userId = $stmt->insert_id;
             $conn->close();
 
+
             return new User($userId, $username, 0.00);
+        } else {
+            return [
+                'type' => 'error',
+                'message' => 'Failed to create user on query'
+            ];
         }
-        return [
-            'type' => 'error',
-            'message' => 'Failed to create user on query'
-        ];
+
     }
 }
 ?>

@@ -14,5 +14,14 @@ class Checking extends Account
     protected function addInterest()
     {
     }
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'nickname' => $this->getNickname(),
+            'balance' => $this->getBalance(),
+            'type' => $this->getType(),
+        ];
+    }
 }
 ?>

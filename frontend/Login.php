@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Signup</title>
 </head>
 
@@ -30,7 +32,7 @@
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
-        fetch('http://localhost:81/BankingApp/backend/controller/UserController.php', {
+        fetch('http://localhost:81/BankingAppPHP/backend/controller/UserController.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

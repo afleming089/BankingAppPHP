@@ -28,7 +28,7 @@
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
-        fetch('http://localhost:81/BankingApp/backend/controller/UserController.php', {
+        fetch('http://localhost:81/BankingAppPHP/backend/controller/UserController.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

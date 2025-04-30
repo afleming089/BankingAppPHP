@@ -23,9 +23,10 @@ class AccountRepository
 
             if ($result->num_rows > 0) {
 
+
                 while ($row = $result->fetch_assoc()) {
                     // make a new table for each account type
-                    switch ($row['Type']) {
+                    switch ($row['AccountType']) {
                         case 'Checking':
                             $account = new Checking($row['AccountID'], $row['Nickname'], $row['Balance']);
                             break;
@@ -38,6 +39,7 @@ class AccountRepository
                         default:
                             throw new Exception("Unknown account type: " . $row['Type']);
                     }
+
                     array_push($accounts, $account);
                 }
 

@@ -8,7 +8,7 @@ renderHeader();
 
     const userId = Cookie.getCookie('id');
 
-    fetch('http://localhost:81/BankingApp/backend/controller/AccountController.php?id=' + userId, {
+    fetch('http://localhost:81/BankingAppPHP/backend/controller/AccountController.php?id=' + userId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -21,8 +21,6 @@ renderHeader();
         throw new Error(response);
     }).then(data => {
         console.log(data);
-        console.log(typeof data);
-
     }).catch(error => {
         console.error('Error:', error);
     })

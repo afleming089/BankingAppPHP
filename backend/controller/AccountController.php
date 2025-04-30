@@ -17,7 +17,7 @@ $userId = $_GET['id'] ?? null;
 switch ("$method $endpoint") {
     case 'GET allAccounts':
         $results = $accountService->getAllAccounts($userId);
-        echo json_encode($results);
-        break;
+        return json_encode($results);
 }
+
 ?>

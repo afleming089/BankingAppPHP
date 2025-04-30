@@ -20,9 +20,13 @@
 
 <script>
     document.getElementById('login').addEventListener('submit', onSubmit);
-    document.cookie = "id='';";
-    document.cookie = "username='';";
-    document.cookie = "auth=false;";
+
+    // clear all cookies
+    document.cookie.split(";").forEach(cookie => {
+        const name = cookie.split("=")[0].trim();
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    });
+
 
     function onSubmit(e) {
         e.preventDefault();
@@ -52,9 +56,10 @@
                 return;
             }
 
-            document.cookie = "id=data.id;";
-            document.cookie = "username=data.username;";
-            document.cookie = "auth=data.auth;";
+            document.cookie = `id=${data.id}; path=/`;
+            document.cookie = `username=${data.username}; path=/`;
+            document.cookie = `auth=${data.auth}; path=/`;
+
             window.location.href = 'Dashboard.php';
         }).catch(error => {
             console.error('Error:', error);

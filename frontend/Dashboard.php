@@ -2,11 +2,32 @@
 include "./components/header.php";
 renderHeader();
 
-echo
-    "<div>
-    <h2>Nickname</h2>
-    <p>1234123123</p>
-    <h3>$100.00</h3>
-    </div>"
+?>
+<script>
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    console.log(document.cookie);
 
-    ?>
+    const userId = getCookie('id');
+
+    console.log(userId);
+    fetch('http://localhost:81/BankingApp/backend/controller/AccountController.php?id=${userId}', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Endpoint': 'allAccounts'
+        }
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error(response);
+    }).then(data => {
+        console.log(data);
+    }).catch(error => {
+        console.error('Error:', error);
+    })
+</script>

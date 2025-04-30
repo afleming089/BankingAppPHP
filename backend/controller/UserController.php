@@ -17,11 +17,11 @@ $password = $input['password'] ?? '';
 
 switch ("$method $endpoint") {
     case 'POST signup':
-        $results = $userService->login($username, $password);
+        $results = $userService->createUser($username, $password);
         echo json_encode($results);
         break;
     case 'POST login':
-        $results = $userService->createUser($username, $password);
+        $results = $userService->login($username, $password);
         echo json_encode($results);
         break;
 }

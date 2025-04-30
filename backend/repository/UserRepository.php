@@ -1,8 +1,4 @@
 <?php
-require_once('../../error_reporting.php');
-$error_reporting = new error_reporting();
-$error_reporting->reportErrors();
-
 require_once('Database.php');
 class UserRepository
 {
@@ -23,7 +19,7 @@ class UserRepository
                 $user = $result->fetch_assoc();
                 $conn->close();
                 return [
-                    'id' => $user['UserId'],
+                    'id' => $user['CustomerID'],
                     'username' => $user['Username'],
                     'auth' => true,
                 ];

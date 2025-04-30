@@ -1,14 +1,32 @@
 <?php
-abstract class Account
+abstract class Account implements JsonSerializable
 {
     private $id;
     private $nickname;
     private $balance;
+    private $type;
 
-    public function __construct(string $nickname, float $balance)
+    public function __construct(int $id, string $nickname, float $balance)
     {
+        $this->id = $id;
         $this->nickname = $nickname;
         $this->balance = $balance;
+        $this->type = get_class($this);
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'accountId' => $this->id,
+            'nickname' => $this->nickname,
+            'balance' => $this->balance,
+            'type' => $this->type,
+        ];
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getBalance()

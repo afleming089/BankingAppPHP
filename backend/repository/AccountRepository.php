@@ -1,5 +1,9 @@
 <?php
 require_once('Database.php');
+require_once('../domain/Account.php');
+require_once('../domain/CheckingAccount.php');
+require_once('../domain/SavingsAccount.php');
+require_once('../domain/LoanAccount.php');
 class AccountRepository
 {
     public function getAllAccounts(int $userId)
@@ -15,15 +19,30 @@ class AccountRepository
         }
         if ($stmt->execute() === TRUE) {
             $result = $stmt->get_result();
+            $accounts = array();
+
             if ($result->num_rows > 0) {
-                $accounts = $result->fetch_assoc();
+
+                while ($row = $result->fetch_assoc()) {
+                    // $account = new Account($row['AccountID'], $row['Nickname'], $row['Balance']);
+                    switch ($row['Type']) {
+                        case 'Checking':
+                            $account = new CheckingAccount($row['AccountID'], $row['Nickname'], $row['Balance']);
+                            break;
+                        case 'Savings':
+                            $account = new SavingsAccount($row['AccountID'], $row['Nickname'], $row['Balance']);
+                            break;
+                        case 'Credit':
+                            $account = new LoanAccount($row['AccountID'], $row['Nickname'], $row['Balance']);
+                            break;
+                        default:
+                            throw new Exception("Unknown account type: " . $row['Type']);
+                    }
+                    array_push($accounts, $row);
+                }
+
                 $conn->close();
-                return [
-                    'AccountID' => $accounts['AccountID'],
-                    'Balance' => $accounts['Balance'],
-                    'Nickname' => $accounts['Nickname'],
-                    'AccountType' => $accounts['AccountType']
-                ];
+                return gettype($accounts);
             } else {
                 return [
                     'type' => 'error',
@@ -37,4 +56,8 @@ class AccountRepository
     {
     }
 }
+
+$repository = new AccountRepository();
+echo $repository->getAllAccounts(2);
+
 ?>

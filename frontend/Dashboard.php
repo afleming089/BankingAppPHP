@@ -21,6 +21,8 @@ renderHeader();
         throw new Error(response);
     }).then(data => {
         console.log(data);
+        console.log(typeof data);
+
     }).catch(error => {
         console.error('Error:', error);
     })

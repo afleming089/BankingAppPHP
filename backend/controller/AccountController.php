@@ -1,8 +1,4 @@
 <?php
-require_once("../../error_reporting.php");
-$error_reporting = new error_reporting();
-$error_reporting->reportErrors();
-
 require_once('../service/AccountService.php');
 
 header("Access-Control-Allow-Origin: *");

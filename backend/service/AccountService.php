@@ -2,7 +2,7 @@
 require_once('../repository/AccountRepository.php');
 class AccountService
 {
-    public function getAllAccounts(int $userId)
+    public function getAllAccounts($userId)
     {
         $accountRepository = new AccountRepository();
         $results = $accountRepository->getAllAccounts($userId);

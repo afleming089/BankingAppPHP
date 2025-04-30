@@ -14,7 +14,6 @@
     include "./components/header.php";
     renderHeader();
     ?>
-
 </body>
 
 <script type="module">

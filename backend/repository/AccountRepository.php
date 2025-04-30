@@ -4,9 +4,11 @@ require_once('../domain/Account.php');
 require_once('../domain/Checking.php');
 require_once('../domain/Savings.php');
 require_once('../domain/Loan.php');
+
+
 class AccountRepository
 {
-    public function getAllAccounts(int $userId)
+    public function getAllAccounts($userId)
     {
         $database = new Database();
         $conn = $database->connect();
@@ -23,7 +25,6 @@ class AccountRepository
 
             if ($result->num_rows > 0) {
 
-
                 while ($row = $result->fetch_assoc()) {
                     // make a new table for each account type
                     switch ($row['AccountType']) {
@@ -33,7 +34,7 @@ class AccountRepository
                         case 'Savings':
                             $account = new Savings($row['AccountID'], $row['Nickname'], $row['Balance'], $row['MaxWithdrawals']);
                             break;
-                        case 'Credit':
+                        case 'Loan':
                             $account = new Loan($row['AccountID'], $row['Nickname'], $row['Balance'], $row['minPayment']);
                             break;
                         default:
@@ -48,8 +49,7 @@ class AccountRepository
             } else {
                 return [
                     'type' => 'error',
-                    'message' => 'Invalid username or password',
-                    'auth' => false,
+                    'message' => 'Failed to fetch accounts',
                 ];
             }
         }
@@ -58,8 +58,4 @@ class AccountRepository
     {
     }
 }
-
-$repository = new AccountRepository();
-echo json_encode($repository->getAllAccounts(2));
-
 ?>

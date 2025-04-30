@@ -9,7 +9,6 @@ renderHeader();
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
-    console.log(document.cookie);
 
     const userId = getCookie('id');
 

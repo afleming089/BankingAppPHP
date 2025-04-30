@@ -1,9 +1,9 @@
 <?php
 require_once('Database.php');
 require_once('../domain/Account.php');
-require_once('../domain/CheckingAccount.php');
-require_once('../domain/SavingsAccount.php');
-require_once('../domain/LoanAccount.php');
+require_once('../domain/Checking.php');
+require_once('../domain/Savings.php');
+require_once('../domain/Loan.php');
 class AccountRepository
 {
     public function getAllAccounts(int $userId)
@@ -24,25 +24,25 @@ class AccountRepository
             if ($result->num_rows > 0) {
 
                 while ($row = $result->fetch_assoc()) {
-                    // $account = new Account($row['AccountID'], $row['Nickname'], $row['Balance']);
+                    // make a new table for each account type
                     switch ($row['Type']) {
                         case 'Checking':
-                            $account = new CheckingAccount($row['AccountID'], $row['Nickname'], $row['Balance']);
+                            $account = new Checking($row['AccountID'], $row['Nickname'], $row['Balance']);
                             break;
                         case 'Savings':
-                            $account = new SavingsAccount($row['AccountID'], $row['Nickname'], $row['Balance']);
+                            $account = new Savings($row['AccountID'], $row['Nickname'], $row['Balance'], $row['MaxWithdrawals']);
                             break;
                         case 'Credit':
-                            $account = new LoanAccount($row['AccountID'], $row['Nickname'], $row['Balance']);
+                            $account = new Loan($row['AccountID'], $row['Nickname'], $row['Balance'], $row['minPayment']);
                             break;
                         default:
                             throw new Exception("Unknown account type: " . $row['Type']);
                     }
-                    array_push($accounts, $row);
+                    array_push($accounts, $account);
                 }
 
                 $conn->close();
-                return gettype($accounts);
+                return $accounts;
             } else {
                 return [
                     'type' => 'error',
@@ -58,6 +58,6 @@ class AccountRepository
 }
 
 $repository = new AccountRepository();
-echo $repository->getAllAccounts(2);
+echo json_encode($repository->getAllAccounts(2));
 
 ?>

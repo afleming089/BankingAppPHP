@@ -13,17 +13,6 @@ abstract class Account implements JsonSerializable
         $this->balance = $balance;
         $this->type = get_class($this);
     }
-
-    public function jsonSerialize()
-    {
-        return [
-            'accountId' => $this->id,
-            'nickname' => $this->nickname,
-            'balance' => $this->balance,
-            'type' => $this->type,
-        ];
-    }
-
     public function getId()
     {
         return $this->id;
@@ -51,5 +40,6 @@ abstract class Account implements JsonSerializable
     }
 
     abstract protected function addInterest();
+    public abstract function jsonSerialize();
 }
 ?>

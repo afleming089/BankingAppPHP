@@ -18,15 +18,11 @@
     <a href="Signup.php">Need an account? Signup here</a>
 </body>
 
-<script>
+<script type="module">
     document.getElementById('login').addEventListener('submit', onSubmit);
 
-    // clear all cookies
-    document.cookie.split(";").forEach(cookie => {
-        const name = cookie.split("=")[0].trim();
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-    });
-
+    import Cookie from "./utility/Cookie.js"
+    Cookie.clearAllCookies();
 
     function onSubmit(e) {
         e.preventDefault();
@@ -50,15 +46,11 @@
             }
             throw new Error(response);
         }).then(data => {
-            if (!data.auth) {
-                alert('Invalid username or password');
-                console.log(data);
-                return;
-            }
+            console.log(data);
 
-            document.cookie = `id=${data.id}; path=/`;
-            document.cookie = `username=${data.username}; path=/`;
-            document.cookie = `auth=${data.auth}; path=/`;
+            document.cookie = `id=` + data.id + `; path=/`;
+            document.cookie = `username=` + data.username + `; path=/`;
+            document.cookie = `totalBalance=` + data.totalBalance + `; path=/`;
 
             window.location.href = 'Dashboard.php';
         }).catch(error => {

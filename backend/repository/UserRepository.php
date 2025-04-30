@@ -1,5 +1,6 @@
 <?php
 require_once('Database.php');
+require_once('../domain/User.php');
 class UserRepository
 {
     public function login($username, $password)
@@ -18,11 +19,7 @@ class UserRepository
             if ($result->num_rows > 0) {
                 $user = $result->fetch_assoc();
                 $conn->close();
-                return [
-                    'id' => $user['CustomerID'],
-                    'username' => $user['Username'],
-                    'auth' => true,
-                ];
+                return new User($user['CustomerID'], $user['Username'], $user['TotalBalance']);
             } else {
                 return [
                     'type' => 'error',
@@ -46,13 +43,8 @@ class UserRepository
         if ($stmt->execute() === TRUE) {
             $userId = $stmt->insert_id;
             $conn->close();
-            return [
-                'id' => $userId,
-                'username' => $username,
-                'auth' => true,
-            ];
 
-
+            return new User($userId, $username, 0.00);
         }
         return [
             'type' => 'error',

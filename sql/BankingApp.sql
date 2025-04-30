@@ -5,7 +5,8 @@ USE BankingApp;
 CREATE TABLE Users (
     CustomerID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(50) NOT NULL UNIQUE,
-    PasswordHash VARBINARY(64) NOT NULL
+    PasswordHash VARBINARY(64) NOT NULL,
+    TotalBalance DECIMAL(12, 2) NOT NULL DEFAULT 0.00
 );
 
 CREATE TABLE Accounts (

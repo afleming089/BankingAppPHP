@@ -44,9 +44,10 @@
             }
             throw new Error(response);
         }).then(data => {
-            document.cookie = "id=data.id;";
-            document.cookie = "username=data.username;";
-            document.cookie = "auth=data.auth;";
+            document.cookie = `id=${data.id}; path=/`;
+            document.cookie = `username=${data.username}; path=/`;
+            document.cookie = `totalBalance=${data.totalBalance}; path=/`;
+
             window.location.href = 'Dashboard.php';
         }).catch(error => {
             console.error('Error:', error);

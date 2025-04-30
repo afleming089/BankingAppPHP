@@ -1,20 +1,30 @@
 <?php
 require_once 'Account.php';
 
-class User
+class User implements JsonSerializable
 {
     private $id;
-    private $userName;
+    private $username;
     private $totalBalance;
 
-    public function __construct($userName)
+    public function __construct(int $id, string $username, float $totalBalance)
     {
-        $this->userName = $userName;
-        $this->totalBalance = 0;
+        $this->id = $id;
+        $this->username = $username;
+        $this->totalBalance = $totalBalance;
     }
-    public function getUserName()
+    public function jsonSerialize()
     {
-        return $this->userName;
+        return [
+            'id' => $this->id,
+            'username' => $this->username,
+            'totalBalance' => $this->totalBalance,
+        ];
+    }
+
+    public function getusername()
+    {
+        return $this->username;
     }
     public function getTotalBalance()
     {

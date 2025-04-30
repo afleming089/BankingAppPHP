@@ -2,13 +2,13 @@
 require_once('Database.php');
 class AccountRepository
 {
-    public function getAllAccounts($userId)
+    public function getAllAccounts(int $userId)
     {
         $database = new Database();
         $conn = $database->connect();
 
         $stmt = $conn->prepare("SELECT * FROM Accounts WHERE CustomerID = ?");
-        $stmt->bind_param("s", $userId); // 'ss' = 2 strings
+        $stmt->bind_param("s", $userId);
 
         if (!$stmt) {
             die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
@@ -19,10 +19,10 @@ class AccountRepository
                 $accounts = $result->fetch_assoc();
                 $conn->close();
                 return [
-                    'AccountID' => $accounts['AccountID'][0],
-                    'Balance' => $accounts['Balance'][0],
-                    'Nickname' => $accounts['Nickname'][0],
-                    'AccountType' => $accounts['AccountType'][0],
+                    'AccountID' => $accounts['AccountID'],
+                    'Balance' => $accounts['Balance'],
+                    'Nickname' => $accounts['Nickname'],
+                    'AccountType' => $accounts['AccountType']
                 ];
             } else {
                 return [

@@ -50,11 +50,16 @@
         }).then(data => {
             console.log(data);
 
-            document.cookie = `id=` + data.id + `; path=/`;
-            document.cookie = `username=` + data.username + `; path=/`;
-            document.cookie = `totalBalance=` + data.totalBalance + `; path=/`;
+            if (data.id) {
+                document.cookie = `id=` + data.id + `; path=/`;
+                document.cookie = `username=` + data.username + `; path=/`;
+                document.cookie = `totalBalance=` + data.totalBalance + `; path=/`;
 
-            window.location.href = 'Dashboard.php';
+                window.location.href = 'Dashboard.php';
+            } else {
+                alert(data.message);
+            }
+
         }).catch(error => {
             console.error('Error:', error);
             alert('Error: ' + error.message);

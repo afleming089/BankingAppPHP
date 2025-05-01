@@ -14,21 +14,23 @@
     include "./components/header.php";
     renderHeader();
     ?>
-    <form id="transactionForm" class="container" method="POST" action="">
-        <label for="deposit">Deposit</label>
-        <input checked type="radio" id="deposit" name="transactionType" value="deposit">
-        <label for="withdraw">Withdraw</label>
-        <input type="radio" id="withdraw" name="transactionType" value="withdraw">
+    <div class="container">
+        <form id="transactionForm" class="form-group">
+            <label for="deposit">Deposit</label>
+            <input class="form-control" checked type="radio" id="deposit" name="transactionType" value="deposit">
+            <label for="withdraw">Withdraw</label>
+            <input class="form-control" type="radio" id="withdraw" name="transactionType" value="withdraw">
 
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" min="0" step="0.01">
+            <label for="amount">Amount:</label>
+            <input class="form-control" type="number" id="amount" name="amount" min="0" step="0.01">
 
-        <label for="accountSelect">Account:</label>
-        <select id="accountSelect" name="accountSelect">
-        </select>
+            <label for="accountSelect">Account:</label>
+            <select class="form-control" id="accountSelect" name="accountSelect">
+            </select>
 
-        <button class="btn btn-primary">Submit</button>
-    </form>
+            <button class="btn btn-primary mt-3">Submit</button>
+        </form>
+    </div>
 
 </body>
 
@@ -49,8 +51,6 @@
         }
         throw new Error(response);
     }).then(data => {
-        console.log(data);
-
         const accountSelect = document.getElementById('accountSelect');
         accountSelect.innerHTML = data.map(account =>
             `<option id="${account.id}" value="${account.id}">${account.nickname}</option>`
@@ -81,7 +81,7 @@
                 return response.json();
             }
         }).then(data => {
-            window.location.href = `AccountDetails.php?id=${accountId}&nickname=new&balance=10421&type=Checking`;
+            window.location.href = `AccountDetails.php?id=${accountId}`;
         })
     }
 </script>

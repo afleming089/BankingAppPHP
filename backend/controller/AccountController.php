@@ -61,5 +61,19 @@ switch ("$method $endpoint") {
         $results = $accountService->transaction($accountId, $amount, $transactionType);
         echo json_encode($results);
         break;
+
+    case 'POST transfer':
+        $input = json_decode(file_get_contents('php://input'), true);
+        $fromAccount = $input['fromAccount'] ?? null;
+        $toAccount = $input['toAccount'] ?? null;
+        $amount = $input['amount'] ?? null;
+
+        if ($fromAccount && $toAccount && $amount) {
+            $results = $accountService->transfer($fromAccount, $toAccount, $amount);
+            echo json_encode($results);
+        } else {
+            echo json_encode(['message' => 'Invalid input']);
+        }
+        break;
 }
 ?>

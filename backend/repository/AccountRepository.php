@@ -148,5 +148,32 @@ class AccountRepository
             ];
         }
     }
+    public function transfer($fromAccount, $toAccount, $amount)
+    {
+        $database = new Database();
+        $conn = $database->connect();
+
+        $stmt = $conn->prepare("UPDATE Accounts SET Balance = Balance - ? WHERE AccountID = ?");
+        $stmt->bind_param("ds", $amount, $fromAccount);
+
+        if ($stmt->execute() === TRUE) {
+            $stmt = $conn->prepare("UPDATE Accounts SET Balance = Balance + ? WHERE AccountID = ?");
+            $stmt->bind_param("ds", $amount, $toAccount);
+        }
+
+
+        if ($stmt->execute() === TRUE) {
+            return [
+                'type' => 'success',
+                'message' => 'Transfer successful',
+            ];
+        } else {
+            return [
+                'type' => 'error',
+                'message' => 'Transfer failed',
+            ];
+        }
+    }
 }
+
 ?>

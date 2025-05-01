@@ -8,8 +8,11 @@ class AccountService
         $results = $accountRepository->getAllAccounts($userId);
         return $results;
     }
-    public function createAccount()
+    public function createAccount($userId, $nickname, $balance, $accountType)
     {
+        $accountRepository = new AccountRepository();
+        $results = $accountRepository->createAccount($userId, $nickname, $balance, $accountType);
+        return $results;
     }
 }
 ?>

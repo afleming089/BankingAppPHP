@@ -5,6 +5,9 @@ require_once('../domain/Checking.php');
 require_once('../domain/Savings.php');
 require_once('../domain/Loan.php');
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 class AccountRepository
 {
@@ -54,8 +57,29 @@ class AccountRepository
             }
         }
     }
-    public function createAccount()
+    public function createAccount($userId, $nickname, $balance, $accountType)
     {
+        $database = new Database();
+        $conn = $database->connect();
+
+        $stmt = $conn->prepare("INSERT INTO Accounts (CustomerID, Nickname, Balance, AccountType) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssds", $userId, $nickname, $balance, $accountType);
+
+        if (!$stmt) {
+            die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
+        }
+        if ($stmt->execute() === TRUE) {
+            return [
+                'type' => 'success',
+                'message' => 'Created account successfully',
+            ];
+        } else {
+            return [
+                'type' => 'error',
+                'message' => 'Invalid inputs',
+            ];
+
+        }
     }
 }
 ?>

@@ -8,12 +8,15 @@
     <title>Dashboard</title>
 </head>
 
-
 <body>
     <?php
     include "./components/header.php";
     renderHeader();
     ?>
+    <div id="accounts" class="container">
+
+    </div>
+
 </body>
 
 <script type="module">
@@ -33,7 +36,18 @@
         }
         throw new Error(response);
     }).then(data => {
+        const accountsContainer = document.getElementById('accounts');
         console.log(data);
+
+        accountsContainer.innerHTML = data.map(account =>
+            `<div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"> ${account.nickname} </h5>
+                    <h6 class="card-subtitle mb-2 text-muted">${account.id}</h6>
+                    <p class="card-text">$${account.balance}</p>
+                </div>
+            </div>`
+        );
     }).catch(error => {
         console.error('Error:', error);
     })

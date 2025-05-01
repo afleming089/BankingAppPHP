@@ -4,28 +4,34 @@ require_once('../service/AccountService.php');
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
-$input = json_decode(file_get_contents('php://input'), true);
-
 $method = $_SERVER['REQUEST_METHOD'];
 $endpoint = $_SERVER['HTTP_X_ENDPOINT'] ?? '';
 
 $accountService = new AccountService();
 
-$userId = $_POST['id'] ?? null;
-
 switch ("$method $endpoint") {
     case 'GET allAccounts':
-        $results = $accountService->getAllAccounts($userId);
-        echo json_encode($results);
+        $input = json_decode(file_get_contents('php://input'), true);
+        $userId = $_GET['id'] ?? null;
+        if ($userId) {
+            $results = $accountService->getAllAccounts($userId);
+            echo json_encode($results);
+        } else {
+            echo json_encode(['message' => 'Invalid user ID']);
+            exit;
+        }
         break;
     case 'POST createAccount':
-        $nickname = $_POST['nickname'] ?? null;
-        $balance = $_POST['balance'] ?? null;
-        $accountType = $_POST['accountType'] ?? null;
+        $input = json_decode(file_get_contents('php://input'), true);
+        $userId = $input['id'] ?? null;
+        $nickname = $input['nickname'] ?? null;
+        $balance = $input['balance'] ?? null;
+        $accountType = $input['accountType'] ?? null;
 
-        if ($nickname && $balance && $accountType) {
+        if ($userId && $nickname && $balance && $accountType) {
             $results = $accountService->createAccount($userId, $nickname, $balance, $accountType);
-            echo json_encode(['message' => $results]);
+
+            echo json_encode($results);
         } else {
             echo json_encode(['message' => 'Invalid input']);
         }

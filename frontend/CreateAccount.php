@@ -30,9 +30,10 @@
 </body>
 
 <script type="module">
-    import Cookie from "./utility/Cookie.js"
+    import Cookie from "./utility/Cookie.js";
 
     const userId = Cookie.getCookie('id');
+
     document.getElementById('createAccount').addEventListener('submit', createAccount);
 
     function createAccount(e) {
@@ -52,11 +53,10 @@
             })
         }).then(response => {
             if (response.ok) {
-                return response;
+                return response.json();
             }
         }).then(data => {
-            console.log(data);
-            alert(data);
+            alert(data.message);
         })
     }
 </script>

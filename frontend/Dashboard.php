@@ -41,7 +41,7 @@
         accountsContainer.innerHTML = data.map(account =>
             `<div class="card">
                 <div class="card-body">
-                    <a class="card-link" href="AccountDetails.php?id=${account.id}&nickname=${account.nickname}&balance=${account.balance}&type=${account.type}">View</a>
+                    <a class="card-link" href="AccountDetails.php?id=${account.id}">View</a>
                     <h4 class="card-title"> ${account.nickname} </h5>
                     <h6 class="card-subtitle mb-2 text-muted">${account.id}</h6>
                     <p class="card-text">$${account.balance}</p>

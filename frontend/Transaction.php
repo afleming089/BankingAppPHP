@@ -14,7 +14,76 @@
     include "./components/header.php";
     renderHeader();
     ?>
+    <form id="transactionForm" class="container" method="POST" action="">
+        <label for="deposit">Deposit</label>
+        <input checked type="radio" id="deposit" name="transactionType" value="deposit">
+        <label for="withdraw">Withdraw</label>
+        <input type="radio" id="withdraw" name="transactionType" value="withdraw">
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" min="0" step="0.01">
+
+        <label for="accountSelect">Account:</label>
+        <select id="accountSelect" name="accountSelect">
+        </select>
+
+        <button class="btn btn-primary">Submit</button>
+    </form>
 
 </body>
+
+<script type="module">
+    import Cookie from "./utility/Cookie.js"
+
+    const userId = Cookie.getCookie('id');
+
+    fetch('http://localhost:81/BankingAppPHP/backend/controller/AccountController.php?id=' + userId, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Endpoint': 'allAccounts'
+        }
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error(response);
+    }).then(data => {
+        console.log(data);
+
+        const accountSelect = document.getElementById('accountSelect');
+        accountSelect.innerHTML = data.map(account =>
+            `<option id="${account.id}" value="${account.id}">${account.nickname}</option>`
+        );
+    }).catch(error => {
+        console.error('Error:', error);
+    })
+
+    document.getElementById('transactionForm').addEventListener('submit', createAccount);
+
+    function createAccount(e) {
+        e.preventDefault();
+        const accountId = document.getElementById('accountSelect').value;
+
+        fetch('http://localhost:81/BankingAppPHP/backend/controller/AccountController.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Endpoint': 'transaction'
+            },
+            body: JSON.stringify({
+                accountId: accountId,
+                amount: document.getElementById('amount').value,
+                transactionType: document.querySelector('input[name="transactionType"]:checked')?.value
+            })
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+        }).then(data => {
+            window.location.href = `AccountDetails.php?id=${accountId}&nickname=new&balance=10421&type=Checking`;
+        })
+    }
+</script>
 
 </html>

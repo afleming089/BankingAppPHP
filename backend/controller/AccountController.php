@@ -21,6 +21,21 @@ switch ("$method $endpoint") {
             exit;
         }
         break;
+
+    case 'GET account':
+        $input = json_decode(file_get_contents('php://input'), true);
+        $userId = $_GET['id'] ?? null;
+        $accountId = $_GET['accountId'] ?? null;
+
+        if ($userId && $accountId) {
+            $results = $accountService->account($userId, $accountId);
+            echo json_encode($results);
+        } else {
+            echo json_encode(['message' => 'Invalid input']);
+            exit;
+        }
+        break;
+
     case 'POST createAccount':
         $input = json_decode(file_get_contents('php://input'), true);
         $userId = $input['id'] ?? null;
@@ -35,6 +50,16 @@ switch ("$method $endpoint") {
         } else {
             echo json_encode(['message' => 'Invalid input']);
         }
+        break;
+
+    case 'POST transaction':
+        $input = json_decode(file_get_contents('php://input'), true);
+        $accountId = $input['accountId'] ?? null;
+        $amount = $input['amount'] ?? null;
+        $transactionType = $input['transactionType'] ?? null;
+
+        $results = $accountService->transaction($accountId, $amount, $transactionType);
+        echo json_encode($results);
         break;
 }
 ?>

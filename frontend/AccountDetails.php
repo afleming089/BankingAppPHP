@@ -1,3 +1,6 @@
+<?php
+$accountId = $_GET['id'];
+?>
 <html lang="en">
 
 <head>
@@ -5,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Account</title>
+    <title>Account Details</title>
 </head>
 
 
@@ -13,29 +16,49 @@
     <?php
     include "./components/header.php";
     renderHeader();
-    $id = $_GET['id'];
-    $nickname = $_GET['nickname'];
-    $balance = $_GET['balance'];
-    $type = $_GET['type'];
     ?>
 
     <div class="card">
-        <div class="card-body">
+        <div id="accountContainer" class="card-body">
             <button class="btn btn-primary" onclick="window.location.href='Dashboard.php'">Back</button>
-            <h4 class="card-title"> <?php echo $nickname ?> </h4>
-            <h6 class="card-subtitle mb-2 text-muted"><?php echo $id ?></h6>
-            <p class="card-text">$<?php echo $balance ?></p>
-            <p class="card-text"><?php echo $type ?></p>
-            <hr class="card-subtitle mb-2 text-muted" />
-            <h6>Transactions</h6>
-            <ul id="transactions" class="list-group">
-                <li class="list-group-item"></li>
-                <li class="list-group-item"></li>
-            </ul>
         </div>
 
     </div>
 
 </body>
+
+<script type="module">
+    import Cookie from "./utility/Cookie.js"
+
+    const userId = Cookie.getCookie('id');
+    const accountId = <?php echo $accountId; ?>;
+
+    fetch(`http://localhost:81/BankingAppPHP/backend/controller/AccountController.php?id=${userId}&accountId=${accountId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Endpoint': 'account'
+        }
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error(response);
+    }).then(data => {
+        const accountsContainer = document.getElementById('accountContainer');
+
+        accountsContainer.innerHTML = `
+            <h4 class="card-title">${data.nickname}</h4>
+            <h6 class="card-subtitle mb-2 text-muted">${data.id}</h6>
+            <p class="card-text">$${data.balance}</p>
+            <p class="card-text">${data.type}</p>
+            <hr class="card-subtitle mb-2 text-muted" />
+            <h6>Transactions</h6>
+            <ul id="transactions" class="list-group">
+                <li class="list-group-item"></li>
+                <li class="list-group-item"></li>
+            </ul>`;
+    })
+</script>
 
 </html>

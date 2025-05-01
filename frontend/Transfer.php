@@ -49,11 +49,11 @@
     }).then(data => {
         const fromAccount = document.getElementById('fromAccount');
         fromAccount.innerHTML = data.map(account =>
-            `<option id="${account.id}" value="${account.id}">${account.nickname}</option>`
+            `<option id="${account.id}" value="${account.id}">${account.nickname} (${account.type})</option>`
         );
         const toAccount = document.getElementById('toAccount');
         toAccount.innerHTML = data.map(account =>
-            `<option id="${account.id}" value="${account.id}">${account.nickname}</option>`
+            `<option id="${account.id}" value="${account.id}">${account.nickname} (${account.type})</option>`
         );
     })
 

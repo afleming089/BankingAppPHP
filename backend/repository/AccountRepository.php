@@ -31,10 +31,13 @@ class AccountRepository
                             $account = new Checking($row['AccountID'], $row['Nickname'], $row['Balance']);
                             break;
                         case 'Savings':
-                            $account = new Savings($row['AccountID'], $row['Nickname'], $row['Balance'], $row['MaxWithdrawals']);
+                            $account = new Savings($row['AccountID'], $row['Nickname'], $row['Balance'], 0);
+                            $account->addInterest();
+
                             break;
                         case 'Loan':
-                            $account = new Loan($row['AccountID'], $row['Nickname'], $row['Balance'], $row['minPayment']);
+                            $account = new Loan($row['AccountID'], $row['Nickname'], $row['Balance'], 0);
+                            $account->addInterest();
                             break;
                         default:
                             throw new Exception("Unknown account type: " . $row['Type']);
@@ -58,6 +61,20 @@ class AccountRepository
         $database = new Database();
         $conn = $database->connect();
 
+        function addInterest($account)
+        {
+            $database = new Database();
+            $conn = $database->connect();
+            $account->addInterest();
+            $newBalance = $account->getBalance();
+            $accountId = $account->getId();
+
+            $deposit = $conn->prepare("UPDATE Accounts SET Balance = Balance + ? WHERE AccountID = ?");
+            $deposit->bind_param("ds", $newBalance, $accountId);
+            $deposit->execute();
+            $deposit->close();
+        }
+
         $stmt = $conn->prepare("SELECT * FROM Accounts WHERE CustomerID = ? AND AccountID = ?");
         $stmt->bind_param("ss", $userId, $accountId);
 
@@ -75,10 +92,16 @@ class AccountRepository
                         $account = new Checking($row['AccountID'], $row['Nickname'], $row['Balance']);
                         break;
                     case 'Savings':
-                        $account = new Savings($row['AccountID'], $row['Nickname'], $row['Balance'], $row['MaxWithdrawals']);
+                        $account = new Savings($row['AccountID'], $row['Nickname'], $row['Balance'], 0);
+
+                        addInterest($account);
+
                         break;
                     case 'Loan':
-                        $account = new Loan($row['AccountID'], $row['Nickname'], $row['Balance'], $row['minPayment']);
+                        $account = new Loan($row['AccountID'], $row['Nickname'], $row['Balance'], 0);
+
+                        addInterest($account);
+
                         break;
                     default:
                         throw new Exception("Unknown account type: " . $row['Type']);
@@ -127,6 +150,17 @@ class AccountRepository
         if ($transactionType == 'deposit') {
             $stmt = $conn->prepare("UPDATE Accounts SET Balance = Balance + ? WHERE AccountID = ?");
             $stmt->bind_param("ds", $amount, $accountId);
+            $transaction = $conn->prepare("INSERT INTO Transactions (AccountID, Amount, TransactionType) VALUES (?, ?, ?)");
+            $transaction->bind_param("sds", $accountId, $amount, $transactionType);
+            $transaction->execute();
+            $transaction->close();
+        } elseif ($transactionType == 'withdraw') {
+            $stmt = $conn->prepare("UPDATE Accounts SET Balance = Balance - ? WHERE AccountID = ?");
+            $stmt->bind_param("ds", $amount, $accountId);
+            $transaction = $conn->prepare("INSERT INTO Transactions (AccountID, Amount, TransactionType) VALUES (?, ?, ?)");
+            $transaction->bind_param("sds", $accountId, $amount, $transactionType);
+            $transaction->execute();
+            $transaction->close();
         } else {
             $stmt = $conn->prepare("UPDATE Accounts SET Balance = Balance - ? WHERE AccountID = ?");
             $stmt->bind_param("ds", $amount, $accountId);
@@ -146,6 +180,37 @@ class AccountRepository
                 'type' => 'error',
                 'message' => 'Transaction failed',
             ];
+        }
+    }
+
+    public function getTransactions($accountId)
+    {
+        $database = new Database();
+        $conn = $database->connect();
+
+        $stmt = $conn->prepare("SELECT * FROM Transactions WHERE AccountID = ?");
+        $stmt->bind_param("s", $accountId);
+
+        if (!$stmt) {
+            die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
+        }
+        if ($stmt->execute() === TRUE) {
+            $result = $stmt->get_result();
+            $transactions = array();
+
+            if ($result->num_rows > 0) {
+
+                while ($row = $result->fetch_assoc()) {
+                    array_push($transactions, $row);
+                }
+
+                return $transactions;
+            } else {
+                return [
+                    'type' => 'error',
+                    'message' => 'Failed to fetch transactions',
+                ];
+            }
         }
     }
     public function transfer($fromAccount, $toAccount, $amount)

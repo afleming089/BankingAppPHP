@@ -35,5 +35,11 @@ class AccountService
         $results = $accountRepository->transfer($fromAccount, $toAccount, $amount);
         return $results;
     }
+    public function getTransactions($accountId)
+    {
+        $accountRepository = new AccountRepository();
+        $results = $accountRepository->getTransactions($accountId);
+        return $results;
+    }
 }
 ?>

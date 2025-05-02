@@ -22,7 +22,6 @@ $accountId = $_GET['id'];
         <div id="accountContainer" class="card-body">
             <button class="btn btn-primary" onclick="window.location.href='Dashboard.php'">Back</button>
         </div>
-
     </div>
 
 </body>
@@ -52,12 +51,12 @@ $accountId = $_GET['id'];
             <h6 class="card-subtitle mb-2 text-muted">${data.id}</h6>
             <p class="card-text">$${data.balance}</p>
             <p class="card-text">${data.type}</p>
-            <hr class="card-subtitle mb-2 text-muted" />
-            <h6>Transactions</h6>
-            <ul id="transactions" class="list-group">
-                <li class="list-group-item"></li>
-                <li class="list-group-item"></li>
-            </ul>`;
+            <hr class="card-subtitle mb-2 text-muted" />`;
+        // <h6>Transactions</h6>
+        // <ul id="transactions" class="list-group">
+        //     <li class="list-group-item"></li>
+        //     <li class="list-group-item"></li>
+        // </ul>
     })
 </script>
 

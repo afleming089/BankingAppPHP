@@ -17,3 +17,11 @@ CREATE TABLE Accounts (
     AccountType ENUM('Checking', 'Savings', 'Loan') NOT NULL,
     FOREIGN KEY (CustomerID) REFERENCES Users(CustomerID)
 );
+
+CREATE TABLE Transactions (
+    TransactionID INT AUTO_INCREMENT PRIMARY KEY,
+    AccountID INT,
+    Amount DECIMAL(12, 2) NOT NULL,
+    TransactionType ENUM('deposit', 'withdraw') NOT NULL,
+    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+);

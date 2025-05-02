@@ -2,7 +2,8 @@
 class Loan extends Account
 {
     private $minPayment;
-    public function __construct(int $id, string $nickname, float $balance, int $minPayment)
+    private $interestRate = 100;
+    public function __construct(int $id, string $nickname, float $balance, int $minPayment = 0)
     {
         $this->minPayment = $minPayment;
         parent::__construct($id, $nickname, $balance);
@@ -17,8 +18,9 @@ class Loan extends Account
     private function isBalanceZero()
     {
     }
-    protected function addInterest()
+    public function addInterest()
     {
+        parent::deposit(parent::getBalance() + $this->interestRate);
     }
     public function jsonSerialize()
     {

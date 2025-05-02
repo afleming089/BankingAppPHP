@@ -4,6 +4,10 @@ require_once('../service/AccountService.php');
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $method = $_SERVER['REQUEST_METHOD'];
 $endpoint = $_SERVER['HTTP_X_ENDPOINT'] ?? '';
 
@@ -70,6 +74,18 @@ switch ("$method $endpoint") {
 
         if ($fromAccount && $toAccount && $amount) {
             $results = $accountService->transfer($fromAccount, $toAccount, $amount);
+            echo json_encode($results);
+        } else {
+            echo json_encode(['message' => 'Invalid input']);
+        }
+        break;
+
+    case 'GET getTransactions':
+        $input = json_decode(file_get_contents('php://input'), true);
+        $accountId = $input['accountId'] ?? null;
+
+        if ($accountId) {
+            $results = $accountService->getTransactions($accountId);
             echo json_encode($results);
         } else {
             echo json_encode(['message' => 'Invalid input']);

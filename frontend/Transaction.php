@@ -53,7 +53,7 @@
     }).then(data => {
         const accountSelect = document.getElementById('accountSelect');
         accountSelect.innerHTML = data.map(account =>
-            `<option id="${account.id}" value="${account.id}">${account.nickname}</option>`
+            `<option id="${account.id}" value="${account.id}">${account.nickname} (${account.type})</option>`
         );
     }).catch(error => {
         console.error('Error:', error);

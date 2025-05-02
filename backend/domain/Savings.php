@@ -3,8 +3,9 @@ class Savings extends Account
 {
     private $maxWithdrawals;
     private $currentWithdraws = 0;
+    private $interestRate = 10;
 
-    public function __construct(int $id, string $nickname, float $balance, int $maxWithdrawals)
+    public function __construct(int $id, string $nickname, float $balance, int $maxWithdrawals = 0)
     {
         parent::__construct($id, $nickname, $balance);
         $this->maxWithdrawals = $maxWithdrawals;
@@ -27,8 +28,9 @@ class Savings extends Account
     {
         $this->maxWithdrawals = $maxWithdrawals;
     }
-    protected function addInterest()
+    public function addInterest()
     {
+        parent::deposit(parent::getBalance() + $this->interestRate);
     }
     public function jsonSerialize()
     {
